@@ -12,20 +12,6 @@ namespace ApiPeliculas.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categorias",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categorias", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pelicula",
                 columns: table => new
                 {
@@ -61,9 +47,6 @@ namespace ApiPeliculas.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Pelicula");
-
-            migrationBuilder.DropTable(
-                name: "Categorias");
         }
     }
 }
