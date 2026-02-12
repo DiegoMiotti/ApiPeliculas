@@ -17,7 +17,17 @@ namespace ApiPeliculas.Repositorio
         public bool ActualizarPelicula(Pelicula pelicula)
         {
             pelicula.FechaCreacion = DateTime.Now;
-            _bd.Pelicula.Update(pelicula);
+            //Arreglar problema del Patch 
+            var peliculaExistente = _bd.Pelicula.Find(pelicula.Id);
+            if (peliculaExistente != null)
+            {
+                _bd.Entry(peliculaExistente).CurrentValues.SetValues(pelicula);
+            }
+            else
+            {
+                _bd.Pelicula.Update(pelicula);
+            }
+
             return Guardar();
         }
 
