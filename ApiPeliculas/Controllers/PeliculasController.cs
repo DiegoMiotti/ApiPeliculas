@@ -33,5 +33,25 @@ namespace ApiPeliculas.Controllers
 
             return Ok(listaPeliculasDto);
         }
+
+        [HttpGet("{peliculaId:int}", Name = "GetPelicula")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetPelicula(int peliculaId)
+        {
+            var itemPelicula = _pelRepo.GetPelicula(peliculaId);
+
+            if (itemPelicula == null)
+            {
+                return NotFound();
+            }
+
+            var itemPeliculaDto = _mapper.Map<PeliculaDto>(itemPelicula) ;
+
+            return Ok(itemPeliculaDto);
+        }
+
     }
 }
