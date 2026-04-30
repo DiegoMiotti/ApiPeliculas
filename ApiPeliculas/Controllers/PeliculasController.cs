@@ -26,7 +26,7 @@ namespace ApiPeliculas.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPeliculas()
+        public IActionResult GetPeliculas()
         {
             var listaPeliculas = _pelRepo.GetPeliculas();
 
@@ -44,7 +44,7 @@ namespace ApiPeliculas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetPelicula(int peliculaId)
+        public IActionResult GetPelicula(int peliculaId)
         {
             var itemPelicula = _pelRepo.GetPelicula(peliculaId);
 
@@ -64,7 +64,7 @@ namespace ApiPeliculas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CrearPelicula([FromBody] CrearPeliculaDto crearPeliculaDto)
+        public IActionResult CrearPelicula([FromBody] CrearPeliculaDto crearPeliculaDto)
         {
             if (!ModelState.IsValid)
             {
@@ -99,10 +99,9 @@ namespace ApiPeliculas.Controllers
 
         [HttpPatch("{peliculaId:int}", Name = "ActualizarPatchPelicula")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ActualizarPatchPelicula(int peliculaId, [FromBody] PeliculaDto peliculaDto)
+        public IActionResult ActualizarPatchPelicula(int peliculaId, [FromBody] PeliculaDto peliculaDto)
         {
             if (!ModelState.IsValid)
             {
@@ -135,7 +134,7 @@ namespace ApiPeliculas.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public async Task<IActionResult> BorrarPelicula(int peliculaId)
+        public IActionResult BorrarPelicula(int peliculaId)
         {
 
             if (!_pelRepo.ExistePelicula(peliculaId))
@@ -161,20 +160,20 @@ namespace ApiPeliculas.Controllers
         public IActionResult GetPeliculasEnCategorias(int categoriaId)
         {
             var listaPeliculas = _pelRepo.GetPeliculasEnCategoria(categoriaId);
-            var listaPeliculasDto = new List<PeliculaDto>();
-
             if (listaPeliculas == null)
             {
                 return NotFound();
             }
-            var itemPelicula = new List<PeliculaDto>();
-            foreach (var pelicula in listaPeliculas) 
+
+            var listaPeliculasDto = new List<PeliculaDto>();
+            foreach (var pelicula in listaPeliculas)
             {
-                itemPelicula.Add(_mapper.Map<PeliculaDto>(pelicula));
+                listaPeliculasDto.Add(_mapper.Map<PeliculaDto>(pelicula));
             }
 
-            return Ok();
+            return Ok(listaPeliculasDto);
         }
+
         [HttpGet("Buscar")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -184,15 +183,22 @@ namespace ApiPeliculas.Controllers
             try
             {
                 var resultado = _pelRepo.BuscarPelicula(nombre);
-                if (resultado.Any())
+                var resultadoDto = new List<PeliculaDto>();
+
+                foreach (var item in resultado)
                 {
-                    return Ok(resultado);
+                    resultadoDto.Add(_mapper.Map<PeliculaDto>(item));
+                }
+
+                if (resultadoDto.Any())
+                {
+                    return Ok(resultadoDto);
                 }
                 return NotFound();
             }
-            catch (Exception) 
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,"Error recuperando datos de la aplicacion");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error recuperando datos de la aplicacion");
             }
         }
     }

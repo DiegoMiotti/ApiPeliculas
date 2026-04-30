@@ -16,12 +16,11 @@ builder.Services.AddSwaggerGen();
 //Agregamos los repositorios 
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 //Agregamos el AutoMapper
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<PeliculasMapper>();
 });
-
-builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 
 var app = builder.Build();
 
@@ -34,4 +33,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+app.Run();app.Run();

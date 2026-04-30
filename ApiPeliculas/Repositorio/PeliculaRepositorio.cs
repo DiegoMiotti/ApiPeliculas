@@ -16,7 +16,6 @@ namespace ApiPeliculas.Repositorio
 
         public bool ActualizarPelicula(Pelicula pelicula)
         {
-            pelicula.FechaCreacion = DateTime.Now;
             //Arreglar problema del Patch 
             var peliculaExistente = _bd.Pelicula.Find(pelicula.Id);
             if (peliculaExistente != null)
@@ -85,7 +84,7 @@ namespace ApiPeliculas.Repositorio
 
         public bool Guardar()
         {
-            return _bd.SaveChanges() >= 0 ? true : false;
+            return _bd.SaveChanges() > 0;
         }
     }
 }
