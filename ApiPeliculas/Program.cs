@@ -17,7 +17,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();
 //Agregamos el AutoMapper
-builder.Services.AddAutoMapper(typeof(PeliculasMapper));
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<PeliculasMapper>();
+});
 
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 
