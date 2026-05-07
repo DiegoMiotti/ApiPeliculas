@@ -17,6 +17,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+//soportamos el CORS
+builder.Services.AddCors(p => p.AddPolicy("PoliticaCors", build =>
+    {
+        build.WithOrigins("http://localhost:3223").AllowAnyMethod().AllowAnyHeader();
+    }));
+
 //Agregamos el AutoMapper
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddProfile<PeliculasMapper>();
@@ -31,6 +37,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("PoliticaCors");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();app.Run();
