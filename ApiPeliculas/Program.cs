@@ -2,8 +2,9 @@ using ApiPeliculas.Data;
 using ApiPeliculas.PeliculasMapper;
 using ApiPeliculas.Repositorio;
 using ApiPeliculas.Repositorio.IRepositorio;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -40,6 +41,21 @@ builder.Services.AddSwaggerGen(options=>
             }
         });
     });
+
+//soporte para cache
+builder.Services.AddResponseCaching();
+//definimos un perfil de cache por defecto para 20 segundos y global asi no tenemos que ponerlo en cada metodo
+builder.Services.AddControllers(options =>
+{  
+    options.CacheProfiles.Add("PorDefecto20Segundos",
+        new CacheProfile()
+        {
+            Duration = 20
+        });
+});
+
+
+
 //Agregamos los repositorios 
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IPeliculaRepositorio, PeliculaRepositorio>();

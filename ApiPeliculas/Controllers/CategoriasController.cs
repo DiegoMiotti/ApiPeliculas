@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiPeliculas.Controllers
 {
+    [ResponseCache(Duration =20)]
     [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
@@ -25,6 +26,7 @@ namespace ApiPeliculas.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        [ResponseCache(Duration = 20)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         //[EnableCors("PoliticaCors")]solo aplica a este metodo
@@ -43,6 +45,7 @@ namespace ApiPeliculas.Controllers
 
         [AllowAnonymous]
         [HttpGet("{categoriaId:int}", Name = "GetCategoria")]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
