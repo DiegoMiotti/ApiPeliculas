@@ -2,6 +2,7 @@
 using ApiPeliculas.Modelos.Dtos;
 using ApiPeliculas.Repositorio.IRepositorio;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -22,7 +23,7 @@ namespace ApiPeliculas.Controllers
             _mapper = mapper;
             this._respuestaApi = new();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -38,7 +39,7 @@ namespace ApiPeliculas.Controllers
 
             return Ok(listaUsuariosDto);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("{usuarioId:int}", Name = "GetUsuario")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -57,7 +58,7 @@ namespace ApiPeliculas.Controllers
 
             return Ok(itemUsuarioDto);
         }
-
+        [AllowAnonymous]
         [HttpPost("registro")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -88,7 +89,7 @@ namespace ApiPeliculas.Controllers
             _respuestaApi.Result = "Usuario registrado exitosamente.";
             return Ok(_respuestaApi);
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
